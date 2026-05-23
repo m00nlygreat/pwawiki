@@ -814,6 +814,8 @@ function initGraphSimulation() {
       y: canReuse ? existing.y : point.y,
       anchorX: canReuse ? existing.anchorX : point.x,
       anchorY: canReuse ? existing.anchorY : point.y,
+      homeAngle: canReuse ? existing.homeAngle : point.angle,
+      homeRadius: canReuse ? existing.homeRadius : point.radius,
       vx: canReuse ? existing.vx : point.vx,
       vy: canReuse ? existing.vy : point.vy,
       fixed: existing?.fixed || false
@@ -1026,28 +1028,31 @@ function graphNodeTarget(node) {
   const centerX = width / 2;
   const centerY = height / 2;
   const rank = graphDistanceRank(node);
-  if (rank <= 0) return { x: centerX, y: centerY, pull: 0.007 };
+  if (rank <= 0) return { x: centerX, y: centerY, pull: 0.0042 };
   if (rank <= 3) return graphFocusRingTarget(node, rank, centerX, centerY);
-  const seed = hashString(node.path);
-  const angle = seed * Math.PI * 2;
-  const radius = Math.min(width, height) * 0.45;
+  const angle = graphHomeAngle(node);
+  const radius = Math.max(node.homeRadius || 0, Math.min(width, height) * 0.45);
   return {
     x: centerX + Math.cos(angle) * radius,
     y: centerY + Math.sin(angle) * radius,
-    pull: 0.00042
+    pull: 0.00032
   };
 }
 
 function graphFocusRingTarget(node, rank, centerX, centerY) {
-  const seed = hashString(node.path);
-  const angle = seed * Math.PI * 2;
-  const radius = rank <= 1 ? 170 : rank <= 2 ? 330 : 500;
-  const pull = rank <= 1 ? 0.0028 : rank <= 2 ? 0.0015 : 0.00085;
+  const angle = graphHomeAngle(node);
+  const radius = rank <= 1 ? 190 : rank <= 2 ? 350 : 520;
+  const pull = rank <= 1 ? 0.0018 : rank <= 2 ? 0.0011 : 0.00068;
   return {
     x: centerX + Math.cos(angle) * radius,
     y: centerY + Math.sin(angle) * radius,
     pull
   };
+}
+
+function graphHomeAngle(node) {
+  if (Number.isFinite(node.homeAngle)) return node.homeAngle;
+  return hashString(node.path) * Math.PI * 2;
 }
 
 function graphRepulsionStrength(a, b) {
@@ -1162,6 +1167,8 @@ function graphInitialPoint(path, index, total, degree) {
   return {
     x: centerX + Math.cos(angle) * radius,
     y: centerY + Math.sin(angle) * radius,
+    angle,
+    radius,
     vx: (seededRandom(seed + 1.3) - 0.5) * 1.4,
     vy: (seededRandom(seed + 2.1) - 0.5) * 1.4
   };
