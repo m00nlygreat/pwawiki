@@ -989,6 +989,7 @@ function stepGraph() {
 }
 
 function drawGraph() {
+  updateGraphLabelScale();
   for (const node of state.graph.nodes.values()) {
     node.el.setAttribute("transform", `translate(${node.x.toFixed(1)} ${node.y.toFixed(1)})`);
   }
@@ -1000,6 +1001,14 @@ function drawGraph() {
     edge.el.setAttribute("y1", a.y.toFixed(1));
     edge.el.setAttribute("x2", b.x.toFixed(1));
     edge.el.setAttribute("y2", b.y.toFixed(1));
+  }
+}
+
+function updateGraphLabelScale() {
+  const scale = state.graph.zoom.toFixed(3);
+  for (const node of state.graph.nodes.values()) {
+    const label = node.el.querySelector("text");
+    if (label) label.setAttribute("transform", `scale(${scale})`);
   }
 }
 
@@ -1098,6 +1107,7 @@ function handleGraphWheel(event) {
   state.graph.zoom = nextZoom;
   const svg = event.currentTarget;
   svg.setAttribute("viewBox", graphViewBox());
+  updateGraphLabelScale();
 }
 
 function handleGraphPointerUp(event) {
