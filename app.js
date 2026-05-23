@@ -1661,7 +1661,7 @@ async function saveCache() {
 
 function openDb() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("pwa-wiki-reader", 1);
+    const request = indexedDB.open("pwawiki", 1);
     request.onupgradeneeded = () => request.result.createObjectStore("handles");
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);

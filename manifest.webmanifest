@@ -1,6 +1,6 @@
 {
-  "name": "PWA Wiki Reader",
-  "short_name": "Wiki Reader",
+  "name": "PwaWiki",
+  "short_name": "PwaWiki",
   "description": "Read-only Obsidian-compatible Markdown vault browser.",
   "start_url": "./index.html",
   "scope": "./",
