@@ -21,6 +21,7 @@ const state = {
   paletteItems: [],
   graph: {
     frame: 0,
+    idleFrame: 0,
     nodes: new Map(),
     edges: [],
     dragging: null,
@@ -838,6 +839,7 @@ function initGraphSimulation() {
   window.addEventListener("pointerup", handleGraphPointerUp);
   settleGraph(96);
   drawGraph();
+  startGraphIdle();
   if (shouldReveal) {
     state.graph.revealTimer = window.setTimeout(() => {
       graphSpace.classList.remove("preparing");
@@ -849,6 +851,7 @@ function initGraphSimulation() {
 
 function stopGraphSimulation() {
   if (state.graph.frame) cancelAnimationFrame(state.graph.frame);
+  stopGraphIdle();
   clearTimeout(state.graph.revealTimer);
   state.graph.frame = 0;
   state.graph.dragging = null;
@@ -892,7 +895,10 @@ function updateGraphFocus(options = {}) {
     const circle = node.el.querySelector("circle");
     if (circle) circle.setAttribute("r", String(node.path === state.activePath ? 14 : state.columns.includes(node.path) ? 12 : 8));
   }
-  if (animate && state.graph.energy && !state.graph.frame) tickGraph();
+  if (animate && state.graph.energy && !state.graph.frame) {
+    stopGraphIdle();
+    tickGraph();
+  }
 }
 
 function tickGraph() {
@@ -907,6 +913,7 @@ function tickGraph() {
   if (!state.graph.dragging && state.graph.energy < 0.006 && motion < nodes.length * 0.008) {
     state.graph.energy = 0;
     state.graph.frame = 0;
+    startGraphIdle();
     return;
   }
   state.graph.frame = requestAnimationFrame(tickGraph);
@@ -993,17 +1000,49 @@ function stepGraph() {
 function drawGraph() {
   updateGraphLabelScale();
   for (const node of state.graph.nodes.values()) {
-    node.el.setAttribute("transform", `translate(${node.x.toFixed(1)} ${node.y.toFixed(1)})`);
+    const point = graphDisplayPoint(node);
+    node.el.setAttribute("transform", `translate(${point.x.toFixed(1)} ${point.y.toFixed(1)})`);
   }
   for (const edge of state.graph.edges) {
     const a = state.graph.nodes.get(edge.from);
     const b = state.graph.nodes.get(edge.to);
     if (!a || !b) continue;
-    edge.el.setAttribute("x1", a.x.toFixed(1));
-    edge.el.setAttribute("y1", a.y.toFixed(1));
-    edge.el.setAttribute("x2", b.x.toFixed(1));
-    edge.el.setAttribute("y2", b.y.toFixed(1));
+    const from = graphDisplayPoint(a);
+    const to = graphDisplayPoint(b);
+    edge.el.setAttribute("x1", from.x.toFixed(1));
+    edge.el.setAttribute("y1", from.y.toFixed(1));
+    edge.el.setAttribute("x2", to.x.toFixed(1));
+    edge.el.setAttribute("y2", to.y.toFixed(1));
   }
+}
+
+function startGraphIdle() {
+  if (state.graph.idleFrame || state.graph.frame || state.graph.dragging || !state.graph.nodes.size) return;
+  state.graph.idleFrame = requestAnimationFrame(tickGraphIdle);
+}
+
+function stopGraphIdle() {
+  if (state.graph.idleFrame) cancelAnimationFrame(state.graph.idleFrame);
+  state.graph.idleFrame = 0;
+}
+
+function tickGraphIdle() {
+  state.graph.idleFrame = 0;
+  if (state.graph.frame || state.graph.dragging || !state.graph.nodes.size) return;
+  drawGraph();
+  state.graph.idleFrame = requestAnimationFrame(tickGraphIdle);
+}
+
+function graphDisplayPoint(node) {
+  if (state.graph.frame || state.graph.dragging) return { x: node.x, y: node.y };
+  const seed = hashString(node.path);
+  const time = performance.now() * 0.001;
+  const phase = seed * Math.PI * 2;
+  const drift = 1.3 + seededRandom(seed + 7.1) * 1.5;
+  return {
+    x: node.x + Math.sin(time * 0.55 + phase) * drift + Math.sin(time * 0.19 + phase * 1.7) * 0.7,
+    y: node.y + Math.cos(time * 0.47 + phase * 1.3) * drift + Math.sin(time * 0.23 + phase * 0.9) * 0.7
+  };
 }
 
 function updateGraphLabelScale() {
@@ -1074,6 +1113,7 @@ function handleGraphPointerDown(event) {
   const node = state.graph.nodes.get(group.dataset.graphPath);
   if (!node) return;
   event.preventDefault();
+  stopGraphIdle();
   group.setPointerCapture?.(event.pointerId);
   const point = graphPointerPoint(event);
   state.graph.dragging = {
@@ -1130,7 +1170,10 @@ function handleGraphPointerUp(event) {
     openDocument(drag.path, { mode: "replace" });
     setMobileMode("");
   }
-  if (!state.graph.frame) tickGraph();
+  if (!state.graph.frame) {
+    stopGraphIdle();
+    tickGraph();
+  }
   window.setTimeout(() => { state.graph.moved = false; }, 0);
 }
 
