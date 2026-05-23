@@ -1005,7 +1005,7 @@ function drawGraph() {
 }
 
 function updateGraphLabelScale() {
-  const scale = state.graph.zoom.toFixed(3);
+  const scale = (state.graph.zoom * 1.65).toFixed(3);
   for (const node of state.graph.nodes.values()) {
     const label = node.el.querySelector("text");
     if (label) label.setAttribute("transform", `scale(${scale})`);
