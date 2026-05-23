@@ -1,0 +1,6 @@
+interface:
+  display_name: "Tiki-taka"
+  short_description: "Make fast decisions through short back-and-forth prompts."
+  default_prompt: "Use $tiki-taka to quickly refine this topic through short confirmations."
+policy:
+  allow_implicit_invocation: true

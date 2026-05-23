@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8fafc">
+  <title>PWA Wiki Reader</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css?v=20260523-46">
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="topbar">
+      <div class="brand" aria-label="PWA Wiki Reader">
+        <div class="mark" aria-hidden="true"></div>
+        <strong>PWA Wiki Reader</strong>
+      </div>
+      <nav class="mobile-tabs" aria-label="모바일 보기 전환">
+        <button id="show-files" type="button">파일</button>
+        <button id="show-workspace" class="primary" type="button">문서</button>
+        <button id="show-graph" type="button">그래프</button>
+      </nav>
+      <label class="search">
+        <span aria-hidden="true">/</span>
+        <input id="search-input" type="search" placeholder="파일명, 제목, 링크 검색" autocomplete="off">
+      </label>
+      <button class="icon" id="graph-toggle" type="button" title="그래프" aria-label="그래프">⌘</button>
+      <button class="primary" id="open-folder" type="button">Vault 열기</button>
+      <button id="open-file" type="button">파일 열기</button>
+      <div class="status" id="status"><span class="dot"></span><span>읽기 전용</span></div>
+    </header>
+
+    <main class="workspace" id="workspace">
+      <aside class="sidebar" id="sidebar" aria-label="Vault 파일 탐색">
+        <div class="sidebar-head">
+          <div>
+            <div class="panel-title" id="vault-name">Vault 없음</div>
+            <div class="panel-sub" id="vault-summary">폴더를 선택하거나 드래그하세요</div>
+          </div>
+        </div>
+        <div class="sidebar-tabs" id="sidebar-tabs" role="tablist" aria-label="사이드바 보기">
+          <button class="active" type="button" role="tab" aria-selected="true" data-sidebar-tab="files">파일 트리</button>
+          <button type="button" role="tab" aria-selected="false" data-sidebar-tab="recent">최근 문서</button>
+        </div>
+        <div class="file-nav" id="file-nav"></div>
+      </aside>
+
+      <section class="workspace-panel" aria-label="Markdown Column Browser">
+        <div class="empty-state" id="empty-state">
+          <div class="empty-panel" id="drop-zone">
+            <h1>Markdown vault를 여세요</h1>
+            <p>Obsidian vault 폴더를 선택하거나 이 화면에 폴더 전체를 드래그/드롭하면 읽기 전용 탐색을 시작합니다.</p>
+            <div class="empty-actions">
+              <button class="primary" id="empty-open-folder" type="button">폴더 선택</button>
+              <button id="empty-open-file" type="button">Markdown 파일 선택</button>
+            </div>
+            <p class="support-note" id="support-note"></p>
+          </div>
+        </div>
+        <div class="column-rail" id="column-rail" hidden>
+          <div class="stack" id="stack" aria-live="polite"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="palette" id="palette" hidden>
+    <div class="palette-backdrop" data-palette-close></div>
+    <div class="palette-panel" role="dialog" aria-modal="true" aria-label="Command Palette">
+      <div class="palette-head">
+        <span class="palette-mode" id="palette-mode">Files</span>
+        <input id="palette-input" type="text" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="palette-list" id="palette-list" role="listbox"></div>
+    </div>
+  </div>
+
+  <input id="folder-input" type="file" webkitdirectory multiple hidden>
+  <input id="file-input" type="file" accept=".md,.markdown,text/markdown,text/plain" hidden>
+  <script src="vendor/markdown-it.min.js?v=14.1.1" defer></script>
+  <script src="vendor/purify.min.js?v=3.4.5" defer></script>
+  <script src="app.js?v=20260523-46" defer></script>
+</body>
+</html>

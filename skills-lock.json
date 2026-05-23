@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "skills": {
+    "design": {
+      "source": "m00nlygreat/picky-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/design/SKILL.md",
+      "computedHash": "27dd37878489705da127a140af7ffe0aa8efeb6ff5b0f7776f4e8a81a552eb86"
+    },
+    "ia": {
+      "source": "m00nlygreat/picky-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/ia/SKILL.md",
+      "computedHash": "e46bb665e41bedc220f2cf53cd5efd1177f26e2a8473bbb46cf006b01ee7d743"
+    },
+    "interact": {
+      "source": "m00nlygreat/picky-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/interact/SKILL.md",
+      "computedHash": "cbc632917dd9eee584f0bd7ad251121f01ed31ed01ae869063a5a6de5e53456b"
+    },
+    "stn": {
+      "source": "m00nlygreat/picky-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/stn/SKILL.md",
+      "computedHash": "68de578ce0a5ce34fd354e4a77bf2083cd6363cc6ca44ded9957980fc9964b65"
+    },
+    "tiki-taka": {
+      "source": "m00nlygreat/picky-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/tiki-taka/SKILL.md",
+      "computedHash": "34d2b4ebbf57c82283d440f8f39f2bf91afad8bc96738300eb646cd0815c6884"
+    },
+    "wiki": {
+      "source": "m00nlygreat/picky-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/wiki/SKILL.md",
+      "computedHash": "edeb5c7ebb202040d2df8418004281d1938578cec8605998b179dd30fb1f8139"
+    },
+    "wireframe": {
+      "source": "m00nlygreat/picky-skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/wireframe/SKILL.md",
+      "computedHash": "d353395ef5ae59253b7f575cf772476b2f3d676272412907e3b4732ccbcabb50"
+    }
+  }
+}
