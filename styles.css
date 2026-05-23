@@ -548,9 +548,10 @@ body.resizing-column { cursor: col-resize; user-select: none; }
 @media (max-width: 1280px) {
   .app { grid-template-rows: 56px minmax(0, 1fr); }
   .mobile-tabs { display: flex; }
-  #show-files { display: none; }
   .workspace { grid-template-columns: minmax(0, 1fr); }
   .sidebar { display: none; }
+  .workspace.show-files .sidebar { display: block; }
+  .workspace.show-files .workspace-panel { display: none; }
   .stack { height: calc(100vh - 56px); }
   .stack-column:not(.collapsed) {
     flex: 1 1 auto;
@@ -575,11 +576,8 @@ body.resizing-column { cursor: col-resize; user-select: none; }
   .brand { min-width: 0; }
   .brand strong, .status, #open-file { display: none; }
   .mobile-tabs { display: flex; }
-  #show-files { display: inline-flex; }
   .workspace { grid-template-columns: 1fr; }
   .sidebar { display: none; }
-  .workspace.show-files .sidebar { display: block; }
-  .workspace.show-files .workspace-panel { display: none; }
   .stack { height: calc(100vh - 54px); padding: 10px 0 10px 10px; }
   .empty-state { min-height: calc(100vh - 54px); }
   .stack-column { flex-basis: 86vw; min-width: 86vw; }

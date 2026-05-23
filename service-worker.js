@@ -1,11 +1,11 @@
-const CACHE_NAME = "pwa-wiki-reader-v55";
+const CACHE_NAME = "pwa-wiki-reader-v56";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=20260523-46",
+  "./styles.css?v=20260523-47",
   "./vendor/markdown-it.min.js?v=14.1.1",
   "./vendor/purify.min.js?v=3.4.5",
-  "./app.js?v=20260523-46",
+  "./app.js?v=20260523-47",
   "./manifest.webmanifest",
   "./icon.svg"
 ];
